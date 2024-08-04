@@ -31,11 +31,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function handleFetchResponse(response) {
     return response.text().then((text) => {
-      console.log("Raw response text:", text); // Log raw response text
+      if (!text) {
+        throw new Error("Invalid JSON response: Response text is empty.");
+      }
+
       try {
-        return JSON.parse(text);
+        const jsonResponse = JSON.parse(text);
+        if (typeof jsonResponse !== "object" || jsonResponse === null) {
+          throw new Error("Invalid JSON response: Invalid JSON structure.");
+        }
+        return jsonResponse;
       } catch (error) {
-        console.error("Error parsing JSON:", error, text);
         throw new Error("Invalid JSON response");
       }
     });
@@ -57,11 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
         },
-        body: JSON.stringify({
-          amount: amount,
-        }),
+        body: JSON.stringify({ amount: amount }),
       })
-        .then(handleFetchResponse)
+        .then((response) => {
+          return handleFetchResponse(response);
+        })
         .then((data) => {
           if (data.success) {
             updateBalance(data.newBalance);
@@ -85,11 +91,11 @@ document.addEventListener("DOMContentLoaded", function () {
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
         },
-        body: JSON.stringify({
-          amount: amount,
-        }),
+        body: JSON.stringify({ amount: amount }),
       })
-        .then(handleFetchResponse)
+        .then((response) => {
+          return handleFetchResponse(response);
+        })
         .then((data) => {
           if (data.success) {
             updateBalance(data.newBalance);

@@ -1,51 +1,43 @@
 local banks = Config.Banks
 
 function openBank(coords)
-    TriggerServerEvent('mta_bank:getBalance', coords)
+    TriggerServerEvent('mta_bank:getBalance')
 end
 
 RegisterNetEvent('mta_bank:sendBalance')
-AddEventHandler('mta_bank:sendBalance', function()
-    ESX.TriggerServerCallback('mta_bank:getPlayerBalance', function(bank)
-        SendNUIMessage({
-            type = "openBank",
-            balance = bank,
-        })
-    end)
+AddEventHandler('mta_bank:sendBalance', function(balance)
+    SendNUIMessage({
+        type = "openBank",
+        balance = balance,
+    })
     SetNuiFocus(true, true)
 end)
 
-RegisterNUICallback('mta_bank:deposit', function(data, cb)
+RegisterNUICallback('deposit', function(data, cb)
     local amount = data.amount
-    ESX.TriggerServerCallback('mta_bank:deposit', function(result)
-        if result.success then
+    ESX.TriggerServerCallback('mta_bank:deposit', function(response)
+        if response.success then
             SendNUIMessage({
                 type = "updateBalance",
-                balance = result.newBalance,
+                balance = response.newBalance,
             })
         else
-            SendNUIMessage({
-                type = "error",
-                message = result.message,
-            })
+            ESX.ShowNotification(response.message)
         end
         cb('ok')
     end, amount)
 end)
 
-RegisterNUICallback('mta_bank:withdraw', function(data, cb)
+RegisterNUICallback('withdraw', function(data, cb)
     local amount = data.amount
-    ESX.TriggerServerCallback('mta_bank:withdraw', function(result)
-        if result.success then
+    ESX.TriggerServerCallback('mta_bank:withdraw', function(response)
+        if response.success then
             SendNUIMessage({
                 type = "updateBalance",
-                balance = result.newBalance,
+                balance = response.newBalance,
             })
         else
-            SendNUIMessage({
-                type = "error",
-                message = result.message,
-            })
+            ESX.ShowNotification(response.message)
         end
         cb('ok')
     end, amount)
@@ -66,8 +58,7 @@ CreateThread(function()
             Wait(1)
         end
 
-        local bankPed = CreatePed(4, GetHashKey(bank.ped.model), bank.coords.x, bank.coords.y, bank.coords.z,
-            bank.heading, false, true)
+        local bankPed = CreatePed(4, GetHashKey(bank.ped.model), bank.coords.x, bank.coords.y, bank.coords.z, bank.heading, false, true)
         SetEntityHeading(bankPed, bank.heading)
         FreezeEntityPosition(bankPed, true)
         SetEntityAsMissionEntity(bankPed, true, true)
