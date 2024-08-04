@@ -128,12 +128,20 @@ input[type="number"] {
   background-color: #c9302c;
 }
 
-
 /* Add animation styles */
 @keyframes balanceChange {
-  0% { transform: scale(1); color: #00ff00; }
-  50% { transform: scale(1.1); color: #ff0000; }
-  100% { transform: scale(1); color: #ffffff; }
+  0% {
+    transform: scale(1);
+    color: #00ff00;
+  }
+  50% {
+    transform: scale(1.1);
+    color: #ff0000;
+  }
+  100% {
+    transform: scale(1);
+    color: #ffffff;
+  }
 }
 
 .balance-change {

@@ -58,7 +58,8 @@ CreateThread(function()
             Wait(1)
         end
 
-        local bankPed = CreatePed(4, GetHashKey(bank.ped.model), bank.coords.x, bank.coords.y, bank.coords.z, bank.heading, false, true)
+        local bankPed = CreatePed(4, GetHashKey(bank.ped.model), bank.coords.x, bank.coords.y, bank.coords.z,
+            bank.heading, false, true)
         SetEntityHeading(bankPed, bank.heading)
         FreezeEntityPosition(bankPed, true)
         SetEntityAsMissionEntity(bankPed, true, true)

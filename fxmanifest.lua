@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
-description 'Shop UI for FiveM'
+description 'Bank UI for FiveM'
 author 'Cs0ng0r'
 
 shared_scripts {
