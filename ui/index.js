@@ -1,0 +1,115 @@
+document.addEventListener("DOMContentLoaded", function () {
+  const bankContainer = document.getElementById("bank");
+  const balanceDisplay = document.getElementById("balance-display");
+  const depositButton = document.getElementById("deposit-button");
+  const withdrawButton = document.getElementById("withdraw-button");
+  const closeButton = document.getElementById("close-button");
+
+  window.addEventListener("message", function (event) {
+    if (event.data.type === "openBank") {
+      bankContainer.style.display = "block";
+      setTimeout(() => {
+        bankContainer.classList.add("show");
+      }, 10);
+
+      updateBalance(event.data.balance);
+    } else if (event.data.type === "closeBank") {
+      bankContainer.classList.remove("show");
+      setTimeout(() => {
+        bankContainer.style.display = "none";
+      }, 300);
+    }
+  });
+
+  function updateBalance(balance) {
+    balanceDisplay.textContent = `$${balance.toFixed(2)}`;
+    balanceDisplay.classList.add("balance-change");
+    setTimeout(() => {
+      balanceDisplay.classList.remove("balance-change");
+    }, 500);
+  }
+
+  function handleFetchResponse(response) {
+    return response.text().then((text) => {
+      console.log("Raw response text:", text); // Log raw response text
+      try {
+        return JSON.parse(text);
+      } catch (error) {
+        console.error("Error parsing JSON:", error, text);
+        throw new Error("Invalid JSON response");
+      }
+    });
+  }
+
+  closeButton.addEventListener("click", function () {
+    fetch(`https://${GetParentResourceName()}/closeBank`, {
+      method: "POST",
+    }).catch((error) => {
+      console.error("Error:", error);
+    });
+  });
+
+  depositButton.addEventListener("click", function () {
+    const amount = parseFloat(document.getElementById("deposit-amount").value);
+    if (amount && !isNaN(amount) && amount > 0) {
+      fetch(`https://${GetParentResourceName()}/deposit`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify({
+          amount: amount,
+        }),
+      })
+        .then(handleFetchResponse)
+        .then((data) => {
+          if (data.success) {
+            updateBalance(data.newBalance);
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } else {
+      alert("Please enter a valid amount to deposit.");
+    }
+  });
+
+  withdrawButton.addEventListener("click", function () {
+    const amount = parseFloat(document.getElementById("withdraw-amount").value);
+    if (amount && !isNaN(amount) && amount > 0) {
+      fetch(`https://${GetParentResourceName()}/withdraw`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify({
+          amount: amount,
+        }),
+      })
+        .then(handleFetchResponse)
+        .then((data) => {
+          if (data.success) {
+            updateBalance(data.newBalance);
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } else {
+      alert("Please enter a valid amount to withdraw.");
+    }
+  });
+
+  window.addEventListener("keyup", (e) => {
+    if (e.key === "Escape") {
+      fetch(`https://${GetParentResourceName()}/closeBank`, {
+        method: "POST",
+      });
+    }
+  });
+});

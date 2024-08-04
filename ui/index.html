@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SharkyDev Bank</title>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/07fd05aa3d.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div id="bank" class="bank-container" style="display: none">
+      <div class="bank-header">
+        <span class="bank-title"
+          >Sharky<span class="highlight">Development</span></span
+        >
+        <span class="bank-subtitle">BANK</span>
+      </div>
+      <div class="bank-content">
+        <div class="bank-section">
+          <h2>Pénzltetétel</h2>
+          <input type="number" id="deposit-amount" placeholder="Összeg" />
+          <br />
+          <button id="deposit-button" class="action-button">
+            <i class="fas fa-coins"></i>Lerakás
+          </button>
+        </div>
+        <div class="bank-section">
+          <h2>Pénzfelvétel</h2>
+          <input type="number" id="withdraw-amount" placeholder="Összeg" />
+          <br />
+          <button id="withdraw-button" class="action-button">
+            <i class="fas fa-money-bill-wave"></i>Felvétel
+          </button>
+        </div>
+        <div class="bank-section">
+          <h2>Egyenleg:</h2>
+          <div id="balance-display">$0.00</div>
+        </div>
+      </div>
+      <button id="close-button" class="close-button">Bezárás</button>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
