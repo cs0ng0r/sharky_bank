@@ -4,12 +4,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const depositButton = document.getElementById("deposit-button");
   const withdrawButton = document.getElementById("withdraw-button");
   const closeButton = document.getElementById("close-button");
+  const depositAmountInput = document.getElementById("deposit-amount");
+  const withdrawAmountInput = document.getElementById("withdraw-amount");
+
+  // Clear input values on opening
 
   window.addEventListener("message", function (event) {
     if (event.data.type === "openBank") {
       bankContainer.style.display = "block";
       setTimeout(() => {
         bankContainer.classList.add("show");
+        depositAmountInput.value = "";
+        withdrawAmountInput.value = "";
       }, 10);
 
       updateBalance(event.data.balance);

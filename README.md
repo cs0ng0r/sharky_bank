@@ -1,4 +1,4 @@
-# Sharky Bank [ESX] [WIP]
+# Sharky Bank [ESX]
 
 Simple bank system with the style of Sharky Shop
 
