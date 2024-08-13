@@ -19,7 +19,8 @@ ESX.RegisterServerCallback('mta_bank:deposit', function(source, cb, amount)
     if amount > 0 and xPlayer.getMoney() >= amount then
         xPlayer.removeMoney(amount)
         xPlayer.addAccountMoney('bank', amount)
-        cb({ success = true, newBalance = xPlayer.getAccount('bank').money })
+        local newBalance = xPlayer.getAccount('bank').money
+        cb({ success = true, newBalance = newBalance })
     else
         cb({ success = false, message = 'Nincs elég pénzed!' })
     end
@@ -33,7 +34,8 @@ ESX.RegisterServerCallback('mta_bank:withdraw', function(source, cb, amount)
     if amount > 0 and balance >= amount then
         xPlayer.removeAccountMoney('bank', amount)
         xPlayer.addMoney(amount)
-        cb({ success = true, newBalance = xPlayer.getAccount('bank').money })
+        local newBalance = xPlayer.getAccount('bank').money
+        cb({ success = true, newBalance = newBalance })
     else
         cb({ success = false, message = 'Nincs elég pénzed a számládon!' })
     end
