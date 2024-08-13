@@ -48,23 +48,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 500);
   }
 
-  function handleFetchResponse(response) {
-    return response.text().then((text) => {
-      if (!text) {
-        throw new Error("Invalid JSON response: Response text is empty.");
-      }
-
-      try {
-        const jsonResponse = JSON.parse(text);
-        if (typeof jsonResponse !== "object" || jsonResponse === null) {
-          throw new Error("Invalid JSON response: Invalid JSON structure.");
-        }
-        return jsonResponse;
-      } catch (error) {
-        throw new Error("Invalid JSON response");
-      }
-    });
-  }
+  handleFetchResponse = (response) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  };
 
   function handleTransaction(endpoint, amount) {
     if (amount && !isNaN(amount) && amount > 0) {
@@ -79,15 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((data) => {
           if (data.success) {
             updateBalance(data.newBalance);
-          } else {
-            alert(data.message);
           }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
         });
-    } else {
-      alert("Adj meg egy érvényes összeget!");
     }
   }
 
